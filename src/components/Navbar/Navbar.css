@@ -1,0 +1,19 @@
+header {
+  /* background-color: green; */
+  display: flex;
+  align-items: center;
+  justify-content: space-evenly;
+  
+}
+
+nav{
+    text-decoration: none;
+}
+
+.links
+{
+    text-decoration: none;
+    margin-left: 40px;
+    margin-right: 40px;
+    font-size: 20px;
+}
