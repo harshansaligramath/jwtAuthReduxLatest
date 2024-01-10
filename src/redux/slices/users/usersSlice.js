@@ -26,22 +26,22 @@ const initialState = {
 export const registerUserAction = createAsyncThunk(
   "users/register",
   async (
-    { email, password, fullname },
+    { email, password, name },
     { rejectWithValue, getState, dispatch }
   ) => {
     try {
-      const  data  = await axios.post(`${baseURL}/users/register`, {
+      const data = await axios.post(`${baseURL}/signup`, {
         email,
         password,
-        fullname,
+        name,
       });
-      // if (data.status==409) {
-      // return rejectWithValue(data.message);
-      // } 
+      // if (data.status!=200 || data.status!=201) {
+      //   console.log("error code 4000");
+      // // return rejectWithValue(data.message);
+      // }
       // debugger
       return data;
     } catch (error) {
-      
       console.log(error);
       return rejectWithValue(error?.response?.data);
     }
@@ -53,15 +53,19 @@ export const getUserProfileAction = createAsyncThunk(
   "users/profile-fetched",
   async (payload, { rejectWithValue, getState, dispatch }) => {
     try {
+
       const token = getState()?.users?.userAuth?.userInfo?.token;
+      debugger
       const config = {
         headers: {
           Authorization: `Bearer ${token}`,
         },
       };
-      const { data } = await axios.get(`${baseURL}/users/profile`, config);
+      const { data } = await axios.get(`${baseURL}/user`, config);
+      debugger
       return data;
     } catch (error) {
+      debugger
       console.log(error);
       return rejectWithValue(error?.response?.data);
     }
@@ -73,15 +77,28 @@ export const loginUserAction = createAsyncThunk(
   "users/login",
   async ({ email, password }, { rejectWithValue, getState, dispatch }) => {
     try {
-      const { data } = await axios.post(`${baseURL}/users/login`, {
+      const response = await axios.post(`${baseURL}/login`, {
         email,
         password,
       });
-      localStorage.setItem("userInfo", JSON.stringify(data));
-      return data;
+      if (response.status == 200) {
+        localStorage.setItem("userInfo", JSON.stringify(response.data));
+
+        return response.data;
+      } else {
+        // debugger;
+        localStorage.setItem("error", response.data.message);
+        
+      }
+
+      // debugger;
+      return response;
     } catch (error) {
+      console.log("sssssssss");
+      debugger;
+
       console.log(error);
-      return rejectWithValue(error?.response?.data);
+      // return rejectWithValue("invalid username or password");
     }
   }
 );

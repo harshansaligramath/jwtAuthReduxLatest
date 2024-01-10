@@ -19,7 +19,7 @@ export default function CustomerProfile() {
         <div />
         <div>
           <h2 className="heading">
-            Hi, {profile?.user?.fullname} you are welcome
+            Hi, {profile?.user?.name} you are welcome
           </h2>
         </div>
         <div />
